@@ -4,6 +4,8 @@
 * [Windows](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/Windows_CG_Score.zip)
 * [Mac OS](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/MacOS_CG_Score.zip)
 
+Note: There may be several steps to overcome Windows/AntiVirus security. You may wish to [Run gui from the command line](#Run gui from the command line)
+
 ## Files Supported
 The app uses 3 types of files to calculate course goal scores for a D2L section. Course goal scores are the percentage of students getting a 70% or better on course goal related assessment.
 
@@ -29,6 +31,11 @@ Ex: python3 cg_score.py 2140_grade_cg.csv GB_Points.csv FinalExamMC.csv
 
 
 [Video Tutorial](https://ggcedu-my.sharepoint.com/:v:/g/personal/ssiva_ggc_edu/EVO5HIB7c0dNhDJctyECUpEBp-8Sq5dzMNLDvScqeoeuOw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=EXA3vG)
+
+
+## Run gui from the command line
+`pip install FreeSimpleGUI`
+`python cg_score_gui.py`
 
 ## How to build the app
 Build (on the corresponding OS) with:

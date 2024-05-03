@@ -30,7 +30,7 @@ class CG_Score_GUI:
 			r = self.cgs.processGradeBook()
 			if r != "": stats_box.update(r)
 			else:
-				self.window['gui_process_btn'].update(disabled=False)
+				self.window['gui_process_btn'].update(disabled=False, button_color=sg.theme_button_color_background())
 				stats_box.update("Ready To Process")
 
 	def process_files(self):
@@ -38,7 +38,7 @@ class CG_Score_GUI:
 		self.show_filter_students()
 		self.cgs.calc_num_students_pass()
 		stats_box.update(self.cgs.get_stats_str())
-		self.window['gui_process_btn'].update(disabled=True)
+		self.window['gui_process_btn'].update(disabled=True, button_color="grey")
 		self.window['gui_browse_files_btn'].update(disabled=True, button_color="grey")
 		
 	
@@ -71,18 +71,7 @@ class CG_Score_GUI:
 		sg.set_options(font=('Any', 12))
 
 		try:
-			"""
-			upload_layout = [
-				[sg.Text("Upload a D2L CSV File")],
-				[
-					sg.In(size=(63, 1), key='gui_file_input'),
-					sg.Push(),
-					sg.FilesBrowse(file_types=(("CSV File", "*.csv"),), target='gui_file_input'),
-					sg.Button('Upload', key='gui_upload_btn')
-				],
-			]
-			"""
-			
+		
 			current_files_layout = [
 				[sg.Multiline("No Files Yet...", disabled=True, no_scrollbar=True, 
 					size=(80, 4), key='gui_current_files_text')],
@@ -91,7 +80,7 @@ class CG_Score_GUI:
 					sg.FilesBrowse('Add Files...', file_types=(("CSV File", "*.csv"),), 
 						key='gui_browse_files_btn', target='gui_file_input'),
 					sg.Button('Process', key='gui_process_btn', 
-						disabled=True, disabled_button_color="grey")]
+						disabled=True, button_color="grey")]
 			]
 			
 			stats_layout = [

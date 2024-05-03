@@ -1,5 +1,9 @@
 # Course Goal Assessment App
 
+## Downloads
+* Windows
+* Mac OS
+
 ## Files Supported
 The app uses 3 types of files to calculate course goal scores for a D2L section. Course goal scores are the percentage of students getting a 70% or better on course goal related assessment.
 
@@ -25,10 +29,6 @@ Ex: python3 cg_score.py 2140_grade_cg.csv GB_Points.csv FinalExamMC.csv
 
 
 [Video Tutorial](https://ggcedu-my.sharepoint.com/:v:/g/personal/ssiva_ggc_edu/EVO5HIB7c0dNhDJctyECUpEBp-8Sq5dzMNLDvScqeoeuOw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=EXA3vG)
-
-## Executable Files
-* Windows
-* Mac OS
 
 ## How to build the app
 Build (on the corresponding OS) with:

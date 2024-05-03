@@ -1,6 +1,10 @@
+# Allow Distribution Zips
+dist_zips
+!*.zip
 
 # Avoid student data
 *.csv 
+
 
 
 #STANDARD PYTHON BELOW

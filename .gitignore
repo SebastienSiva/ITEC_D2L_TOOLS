@@ -1,3 +1,6 @@
+# Allow the dist apps
+!cg_score_gui.app
+
 # Avoid student data
 *.csv 
 

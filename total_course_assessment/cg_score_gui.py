@@ -45,12 +45,14 @@ class CG_Score_GUI:
 	def show_filter_students(self):
 		unignore = []
 		for sid in self.cgs.ignored_students:
-			s = sid + " has:"		
-			for reason in self.cgs.ignored_students[sid]: s += ('\n\t' + reason)
-			s += '\n\nIgnore ' + sid + '?'
-			event, values = sg.Window(s, [
-				[sg.Text(s)], 
-				[sg.Push(), sg.Button('Keep'), sg.Button('Ignore')]]).read(close=True)
+			s = ""
+			for reason in self.cgs.ignored_students[sid]: s += ('\t- ' + reason + '\n')
+			event, values = sg.Window("Remove Student",
+				[
+					[sg.Text(sid + " issues:", size=40)],
+					[sg.Text(s)],
+					[sg.Push(), sg.Text('Remove ' + sid + '?'), sg.Button('Keep'), sg.Button('Remove')]
+				]).read(close=True)
 			if event == 'Keep': unignore.append(sid)
 		
 		for sid in unignore: del self.cgs.ignored_students[sid]
@@ -109,7 +111,7 @@ class CG_Score_GUI:
 			# Create the window
 			self.window = sg.Window('Course Goal Scorer', [
 				#[sg.Frame("File Upload", upload_layout, expand_x=True)], 
-				[sg.Frame("Processed Files", current_files_layout, expand_x=True)],
+				[sg.Frame("Files To Process", current_files_layout, expand_x=True)],
 				[sg.Frame("Data Analysis", stats_layout, expand_x=True)],
 				last_layout
 			])

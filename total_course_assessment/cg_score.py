@@ -143,7 +143,7 @@ class CG_Score:
 						grade_max = float(r.group(1))
 						grade_points = float(self.grade_book[sid][header])
 						if grade_points == 0:
-							self.ignored_students[sid].append('0 for ' + grade_name)
+							self.ignored_students[sid].append(grade_name + ': 0 Points')
 						for cg in self.grade_book_cgs[grade_name]:
 							self.students[sid][cg+'_points'] += grade_points
 							self.students[sid][cg+'_max'] += grade_max
@@ -191,14 +191,15 @@ class CG_Score:
 		else: return "ERROR: UNRECOGNISED FILE"	
 
 	def check_student_mismatch(self, new_students, f_name):
+		f_name = os.path.basename(f_name)
 		old_students = self.students.keys()
 		if len(old_students) == 0:
 			return
 		# print("SPECIAL", new_students - old_students)
 		for sid in new_students - old_students:
-			self.ignored_students[sid].append("Unexpected new student " + sid + " found in " + f_name)
+			self.ignored_students[sid].append("Student in " + f_name + " not found in other files.")
 		for sid in old_students - new_students:
-			self.ignored_students[sid].append("Student " + sid + " missing in " + f_name)
+			self.ignored_students[sid].append("Student missing from " + f_name + ".")
 	
 					
 	def filter_students(self):

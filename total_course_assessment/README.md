@@ -31,7 +31,7 @@ Ex: python3 cg_score.py 2140_grade_cg.csv GB_Points.csv FinalExamMC.csv
 * Mac OS
 
 ## How to build the app
-Build (on the corresponding OS) with
+Build (on the corresponding OS) with:
 
 `pyinstaller --noconsole --onefile cg_score_gui.py`
 

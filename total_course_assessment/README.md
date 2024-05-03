@@ -5,6 +5,7 @@
 * [Mac OS](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/MacOS_CG_Score.zip)
 
 Note: There may be several steps to overcome Windows/AntiVirus security. You may wish to:
+
 [Run gui from the command line](#Run gui from the command line)
 
 ## Files Supported

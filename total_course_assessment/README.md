@@ -2,7 +2,7 @@
 
 ## Downloads
 * Windows
-* Mac OS
+* [Mac OS](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/MacOS_CG_Score.zip)
 
 ## Files Supported
 The app uses 3 types of files to calculate course goal scores for a D2L section. Course goal scores are the percentage of students getting a 70% or better on course goal related assessment.

@@ -1,7 +1,7 @@
 # Course Goal Assessment App
 
 ## Download The GUI
-* Windows
+* [Windows](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/Windows_CG_Score.zip)
 * [Mac OS](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/MacOS_CG_Score.zip)
 
 ## Files Supported

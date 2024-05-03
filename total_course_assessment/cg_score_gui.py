@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import traceback, os
+import traceback, os, webbrowser
 import FreeSimpleGUI as sg
 from cg_score import *
 
@@ -126,6 +126,8 @@ class CG_Score_GUI:
 					self.cgs = CG_Score()
 					self.window.close()
 					self.main()
+				elif event == 'gui_help_btn':
+					webbrowser.open('https://github.com/SebastienSiva/ITEC_D2L_TOOLS/tree/main/total_course_assessment')
 				elif event == 'gui_quit_btn' or event == sg.WIN_CLOSED:
 					break		
 			self.window.close()

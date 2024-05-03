@@ -42,7 +42,16 @@ class CG_Score:
 		self.ignored_students = defaultdict(list) # {'#400.139102':['Zero for Asg1', 'Zero for Asg2'], ...}
 		self.num_students_pass = defaultdict(int) # {CG1:13, CG2:14, ...}
 
-		
+	
+	def hasNoFiles(self):
+		return (self.grade_book == None and self.grade_book_cgs == None 
+			and len(self.students) == 0)
+
+	def readyToProcess(self):
+		return ((self.grade_book != None and self.grade_book_cgs != None)
+			or len(self.students) > 0)
+			
+	
 	#################################################################################
 	# QUIZ FILES
 	#################################################################################
@@ -134,7 +143,7 @@ class CG_Score:
 						grade_max = float(r.group(1))
 						grade_points = float(self.grade_book[sid][header])
 						if grade_points == 0:
-							self.ignored_students[sid].append('Zero for ' + grade_name)
+							self.ignored_students[sid].append('0 for ' + grade_name)
 						for cg in self.grade_book_cgs[grade_name]:
 							self.students[sid][cg+'_points'] += grade_points
 							self.students[sid][cg+'_max'] += grade_max
@@ -179,8 +188,7 @@ class CG_Score:
 		elif self.isQuizPointFile(f):
 			self.processQuizPointFile(f)
 			return "QUIZ FILE"
-		else: return "ERROR: UNRECOGNISED FILE"
-	
+		else: return "ERROR: UNRECOGNISED FILE"	
 
 	def check_student_mismatch(self, new_students, f_name):
 		old_students = self.students.keys()
@@ -205,8 +213,24 @@ class CG_Score:
 					max_points = scores[key.replace('_points', '_max')]
 					if max_points > 0 and points / max_points >= 0.7:
 						self.num_students_pass[key[0:-len('_points')]] += 1;
-	
+						
+	def get_stats_str(self):
+		s = "TOTAL STUDENTS: %s\n" % (len(self.students))
+		header = 'PERCENT OF STUDENTS GETTING >= 70% ON EACH COURSE GOAL'
+		s += ("\n%s\n%s\n") % (header, '*' * 80)
+		for cg in sorted(self.num_students_pass.keys()):
+			p = round(100 * self.num_students_pass[cg] / len(self.students), 0)
+			s += (cg + ": " + str(p) + '%\n')
 		
+		header = 'ALL STUDENT COURSE GOAL SCORES'
+		s += ("\n%s\n%s\n") % (header, '*' * 80)
+		for sid, points in self.students.items():
+			cg_names = [c.replace('_points', '') for c in sorted(points.keys()) if '_points' in c]
+			cg_scores = ["%s %s/%s" % (c, round(points[c + '_points'], 1), points[c + '_max']) 
+				for c in cg_names]
+			s += (sid[sid.find('-')+1:] + ' ' + ', '.join(cg_scores)) + '\n'
+
+		return s
 
 #########################################################################################
 # MAIN
@@ -237,8 +261,7 @@ if __name__ == "__main__":
 		print("Ignored Student: " + sid + " has:")
 		for reason in cgs.ignored_students[sid]:
 			print('\t' + reason)
-			if input("Ignore " + sid + "for analysis ([y] or n)? ") == 'n':
-				unignore.append(sid)
+		if input("Ignore " + sid + " for analysis ([y] or n)? ") == 'n': unignore.append(sid)
 	for sid in unignore:
 		del cgs.ignored_students[sid]
 	
@@ -246,18 +269,4 @@ if __name__ == "__main__":
 
 	cgs.calc_num_students_pass()
 	
-	print("\nALL STUDENT COURSE GOAL SCORES")
-	for sid, points in cgs.students.items():
-		cg_names = [c.replace('_points', '') for c in sorted(points.keys()) if '_points' in c]
-		cg_scores = ["%s %s/%s" % (c, round(points[c + '_points'], 1), points[c + '_max']) 
-			for c in cg_names]
-		print(sid[sid.find('-')+1:], ", ".join(cg_scores)) # [(cg, points[cg]) for cg in cgs])
-	
-	
-	print("\nPERCENT OF STUDENTS GETTING >= 70% ON EACH COURSE GOAL")
-	for cg in sorted(cgs.num_students_pass.keys()):
-		p = round(100 * cgs.num_students_pass[cg] / len(cgs.students), 0)
-		print(cg + ": " + str(p) + '%')
-	
-	print("\nTOTAL STUDENTS:", len(cgs.students)) 
-			
+	print(cgs.get_stats_str())

@@ -62,7 +62,7 @@ class CG_Score:
 				if q_title in student_questions: continue # question already done
 				student_questions.add(q_title)
 			
-				for cg in re.findall(r"G\d", q_title):
+				for cg in re.findall(r"G\d", q_title) + re.findall(r"GOAL \d", q_title.upper()):
 					cgp = 'C' + cg + '_points'
 					cgm = 'C' + cg + '_max'
 					if cgp not in student_points:

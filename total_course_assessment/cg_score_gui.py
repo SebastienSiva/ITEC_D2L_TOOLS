@@ -103,7 +103,7 @@ class CG_Score_GUI:
 				[sg.Frame("Files To Process", current_files_layout, expand_x=True)],
 				[sg.Frame("Data Analysis", stats_layout, expand_x=True)],
 				last_layout
-			])
+			]).finalize()
 			
 			while True:
 				event, values = self.window.read()

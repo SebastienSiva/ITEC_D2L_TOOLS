@@ -144,7 +144,8 @@ class CG_Score:
 		with open(f, 'r', newline='') as csvfile:
 			reader = csv.reader(csvfile); next(reader)
 			for row in reader:
-				gradebook_cgs[row[0]] = ['CG' + x for x in row[1:]]
+				gradebook_cgs[row[0]] = ['CG' + x for x in row[1:] if len(x.strip()) > 0]
+		print(gradebook_cgs)
 		return gradebook_cgs
 		
 

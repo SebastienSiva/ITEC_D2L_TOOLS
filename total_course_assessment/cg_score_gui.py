@@ -27,7 +27,7 @@ class CG_Score_GUI:
 			else: file_box.update(file_box.get() + '\n' + file_data)
 
 			stats_box = self.window['gui_stats_text']
-			r = self.cgs.processGradeBook()
+			r = self.cgs.processGradeBook() # TODO Fix. We are calling this 3 times!
 			if r != "": stats_box.update(r)
 			else:
 				self.window['gui_process_btn'].update(disabled=False, button_color=sg.theme_button_color_background())
@@ -47,7 +47,8 @@ class CG_Score_GUI:
 		for sid in self.cgs.ignored_students:
 			s = ""
 			for reason in self.cgs.ignored_students[sid]: s += ('\t- ' + reason + '\n')
-			event, values = sg.Window("Remove Student",
+
+			event, values = sg.Window("Remove Student From Analysis",
 				[
 					[sg.Text(sid + " issues:", size=40)],
 					[sg.Text(s)],

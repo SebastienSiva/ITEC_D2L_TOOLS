@@ -18,6 +18,7 @@ class CG_Score:
 	def __init__(self):
 		self.grade_book = None
 		self.grade_book_cgs = None
+		self.grade_book_processed = False
 		self.students = defaultdict(lambda: defaultdict(int)) # {'#400.139102':{'CG1_points':17, 'CG1_max':20, ...}, '#400.222222':{'CG1_points':12, ...}}
 		self.ignored_students = defaultdict(list) # {'#400.139102':['Zero for Asg1', 'Zero for Asg2'], ...}
 		self.num_students_pass = defaultdict(int) # {CG1:13, CG2:14, ...}
@@ -26,10 +27,6 @@ class CG_Score:
 	def hasNoFiles(self):
 		return (self.grade_book == None and self.grade_book_cgs == None 
 			and len(self.students) == 0)
-
-	def readyToProcess(self):
-		return ((self.grade_book != None and self.grade_book_cgs != None)
-			or len(self.students) > 0)
 			
 	
 	#################################################################################
@@ -62,7 +59,7 @@ class CG_Score:
 				if q_title in student_questions: continue # question already done
 				student_questions.add(q_title)
 			
-				for cg in re.findall(r"G\d", q_title) + re.findall(r"GOAL \d", q_title.upper()):
+				for cg in re.findall(r"G\d", q_title): # + re.findall(r"GOAL \d", q_title.upper()):
 					cgp = 'C' + cg + '_points'
 					cgm = 'C' + cg + '_max'
 					if cgp not in student_points:
@@ -110,10 +107,10 @@ class CG_Score:
 	def processGradeBook(self):
 		if bool(self.grade_book) != bool(self.grade_book_cgs):
 			return "ERROR: Requires both gradebook and gradebook_cg_map or neither."
-		elif self.grade_book == None: return ""
+		elif self.grade_book == None or self.grade_book_processed: return ""
 		
+		self.grade_book_processed = True
 		for sid in self.grade_book:
-			self.students[sid] = defaultdict(int)
 			for header in self.grade_book[sid]:
 				if GRADE_BOOK_SEARCH_TAG in header:
 					grade_name = header[0:header.find(GRADE_BOOK_SEARCH_TAG) - 1]
@@ -127,6 +124,7 @@ class CG_Score:
 						for cg in self.grade_book_cgs[grade_name]:
 							self.students[sid][cg+'_points'] += grade_points
 							self.students[sid][cg+'_max'] += grade_max
+
 		return ""		
 
 
@@ -175,7 +173,7 @@ class CG_Score:
 		old_students = self.students.keys()
 		if len(old_students) == 0:
 			return
-		# print("SPECIAL", new_students - old_students)
+
 		for sid in new_students - old_students:
 			self.ignored_students[sid].append("Student in " + f_name + " not found in other files.")
 		for sid in old_students - new_students:

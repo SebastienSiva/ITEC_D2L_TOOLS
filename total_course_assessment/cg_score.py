@@ -22,6 +22,7 @@ class CG_Score:
 		self.students = defaultdict(lambda: defaultdict(int)) # {'#400.139102':{'CG1_points':17, 'CG1_max':20, ...}, '#400.222222':{'CG1_points':12, ...}}
 		self.ignored_students = defaultdict(list) # {'#400.139102':['Zero for Asg1', 'Zero for Asg2'], ...}
 		self.num_students_pass = defaultdict(int) # {CG1:13, CG2:14, ...}
+		self.cg_map = defaultdict(set) # only used for display {'CG1':{'IJ_class_asg5', 'CG5.1-Logical OR operator'}, 'CG2':...}
 
 	
 	def hasNoFiles(self):
@@ -42,6 +43,7 @@ class CG_Score:
 		return False;	
 
 	def processQuizPointFile(self, f):
+		base_file_name = os.path.basename(f)
 		CG_points = {} # {'400.139102':{'CG1_points':17, 'CG1_max':20, 'CG2_points':11,}}
 		ques_titles = {} # {'400.139102':{'G5-O6/O7-a1', 'G2   valid var', ...}}
 		with open(f, 'r', newline='') as csvfile:
@@ -55,13 +57,14 @@ class CG_Score:
 					ques_titles[sid] = set()
 				student_points = CG_points[sid]
 				student_questions = ques_titles[sid]
-				q_title = row['Q Title']+row['Q Text']
+				q_title = row['Q Title'] + ': ' + row['Q Text']
 				if q_title in student_questions: continue # question already done
 				student_questions.add(q_title)
-			
-				for cg in re.findall(r"G\d", q_title): # + re.findall(r"GOAL \d", q_title.upper()):
-					cgp = 'C' + cg + '_points'
-					cgm = 'C' + cg + '_max'
+				for cg in re.findall(r"G\d", row['Q Title'].upper()): # + re.findall(r"GOAL \d", row['Q Title'].upper()):
+					cg_lbl = 'C' + cg
+					self.cg_map[cg_lbl].add(base_file_name + ': ' + q_title)			
+					cgp = cg_lbl + '_points'
+					cgm = cg_lbl + '_max'
 					if cgp not in student_points:
 						student_points[cgp] = 0.0
 						student_points[cgm] = 0.0
@@ -140,12 +143,16 @@ class CG_Score:
 		return False;	
 
 	def buildGradeBookCGs(self, f):
+		base_file_name = os.path.basename(f)
 		gradebook_cgs = {}
 		with open(f, 'r', newline='') as csvfile:
 			reader = csv.reader(csvfile); next(reader)
 			for row in reader:
-				gradebook_cgs[row[0]] = ['CG' + x for x in row[1:] if len(x.strip()) > 0]
-		print(gradebook_cgs)
+				asg_name = row[0]
+				cg_list = ['CG' + x for x in row[1:] if len(x.strip()) > 0]
+				gradebook_cgs[asg_name] = cg_list
+				for cg in cg_list: self.cg_map[cg].add(base_file_name + ': ' + asg_name)
+
 		return gradebook_cgs
 		
 
@@ -201,6 +208,13 @@ class CG_Score:
 		for cg in sorted(self.num_students_pass.keys()):
 			p = round(100 * self.num_students_pass[cg] / len(self.students), 0)
 			s += (cg + ": " + str(p) + '%\n')
+
+		header = 'COURSE GOAL MAP'
+		s += ("\n%s\n%s\n") % (header, '*' * 80)
+		for cg in sorted(self.cg_map.keys()): 
+			s += cg + "\n"
+			for label in sorted(self.cg_map[cg]):
+				s += ' - ' + label[0:80] + ('...' if len(label) >= 80 else '') + '\n'
 		
 		header = 'ALL STUDENT COURSE GOAL SCORES'
 		s += ("\n%s\n%s\n") % (header, '*' * 80)

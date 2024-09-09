@@ -6,6 +6,8 @@
 
 Note: There may be several steps to overcome Windows/AntiVirus security. You may wish to run the gui from the command line (see below...)
 
+Mac OS Notes: After trying to run the app and getting blocked, try going into Settings->Privacy and Security. There, under security, you will see the 'Run the App Anyways' option.
+
 ## Files Supported
 The app uses 3 types of files to calculate course goal scores for a D2L section. Course goal scores are the percentage of students getting a 70% or better on course goal related assessment.
 

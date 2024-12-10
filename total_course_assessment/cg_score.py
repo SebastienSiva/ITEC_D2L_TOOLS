@@ -50,7 +50,6 @@ class CG_Score:
 		with open(f, 'r', newline='', encoding='utf-8-sig') as csvfile:
 			dr = csv.DictReader(csvfile)
 			for row in dr:
-				print(row.keys())
 				sid = '#%s-%s_%s' % (row['Org Defined ID'], row['FirstName'], row['LastName'])
 				if "400" not in sid: continue # avoid demo id
 

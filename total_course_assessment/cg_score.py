@@ -57,12 +57,12 @@ class CG_Score:
 					ques_titles[sid] = set()
 				student_points = CG_points[sid]
 				student_questions = ques_titles[sid]
-				q_title = row['Q Title'] + ': ' + row['Q Text']
-				if q_title in student_questions: continue # question already done
-				student_questions.add(q_title)
-				for cg in re.findall(r"G\d", row['Q Title'].upper()): # + re.findall(r"GOAL \d", row['Q Title'].upper()):
-					cg_lbl = 'C' + cg
-					self.cg_map[cg_lbl].add(base_file_name + ': ' + q_title)			
+				qid = row['Q Title'] + ': ' + row['Q Text']
+				if qid in student_questions: continue # question already done
+				student_questions.add(qid)
+				for cg in re.findall(r"\[GOAL (\d+)\]", qid.upper()): # + re.findall(r"GOAL \d", row['Q Title'].upper()):
+					cg_lbl = 'CG' + cg
+					self.cg_map[cg_lbl].add(base_file_name + ': ' + qid)			
 					cgp = cg_lbl + '_points'
 					cgm = cg_lbl + '_max'
 					if cgp not in student_points:

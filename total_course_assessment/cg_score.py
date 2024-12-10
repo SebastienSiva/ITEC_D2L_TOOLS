@@ -136,7 +136,7 @@ class CG_Score:
 	# GRADE BOOK CG MAPPING FILE
 	#########################################################################################
 	def isGradeBookCGMapFile(self, f):
-		with open(f, 'r', newline='') as csvfile:
+		with open(f, 'r', newline='', encoding='utf-8-sig') as csvfile:
 			reader = csv.reader(csvfile)
 			first_row = next(reader)
 			if first_row[0:2] == ["GRADE_NAME", "CG"]:
@@ -146,14 +146,13 @@ class CG_Score:
 	def buildGradeBookCGs(self, f):
 		base_file_name = os.path.basename(f)
 		gradebook_cgs = {}
-		with open(f, 'r', newline='') as csvfile:
+		with open(f, 'r', newline='', encoding='utf-8-sig') as csvfile:
 			reader = csv.reader(csvfile); next(reader)
 			for row in reader:
 				asg_name = row[0]
 				cg_list = [x for x in row[1:] if len(x.strip()) > 0]
 				gradebook_cgs[asg_name] = cg_list
 				for cg in cg_list: self.cg_map[cg].add(base_file_name + ': ' + asg_name)
-
 		return gradebook_cgs
 		
 

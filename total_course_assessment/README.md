@@ -11,7 +11,7 @@ Mac OS Notes: After trying to run the app and getting blocked, try going into Se
 ## Files Supported
 The app uses 3 types of files to calculate course goal scores for a D2L section. Course goal scores are the percentage of students getting a 70% or better on course goal related assessment.
 
-* **File_Type1** (>= 0 files): Quiz grade export CSV files with the *Question Title (a.k.a. Short Description)* or *Question Text* containing 1 or more course goal identifiers with exact format [GOAL X] where X is a number. Examples: [GOAL 3], [GOAL 4]
+* **File_Type1** (>= 0 files): Quiz grade export CSV files with the *Question Title (a.k.a. Short Description)* or *Question Text* containing one or more course goal identifiers with exact format [GOAL X] where X is a number. Examples: [GOAL 3], [GOAL 4]
 
 * **File_Type2** (0 or 1 file): The D2L gradebook exported as Points CSV with OrgId, FirstName, LastName.
 

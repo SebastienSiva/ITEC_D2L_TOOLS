@@ -35,7 +35,7 @@ class CG_Score:
 	# QUIZ FILES
 	#################################################################################
 	def isQuizPointFile(self, f):
-		with open(f, 'r', newline='') as csvfile:
+		with open(f, 'r', newline='', encoding='utf-8-sig') as csvfile:
 			reader = csv.reader(csvfile)
 			first_row = next(reader)
 			for entry in first_row:
@@ -47,9 +47,10 @@ class CG_Score:
 		base_file_name = os.path.basename(f)
 		CG_points = {} # {'400.139102':{'CG1_points':17, 'CG1_max':20, 'CG2_points':11,}}
 		ques_titles = {} # {'400.139102':{'G5-O6/O7-a1', 'G2   valid var', ...}}
-		with open(f, 'r', newline='') as csvfile:
+		with open(f, 'r', newline='', encoding='utf-8-sig') as csvfile:
 			dr = csv.DictReader(csvfile)
 			for row in dr:
+				print(row.keys())
 				sid = '#%s-%s_%s' % (row['Org Defined ID'], row['FirstName'], row['LastName'])
 				if "400" not in sid: continue # avoid demo id
 
@@ -85,7 +86,7 @@ class CG_Score:
 	# GRADEBOOK FILE
 	#################################################################################
 	def isGradeBookFile(self, f):
-		with open(f, 'r', newline='') as csvfile:
+		with open(f, 'r', newline='', encoding='utf-8-sig') as csvfile:
 			reader = csv.reader(csvfile)
 			first_row = next(reader)
 			for entry in first_row:
@@ -95,7 +96,7 @@ class CG_Score:
 
 	def buildGradeBook(self, f):
 		gradebook = {} # {'#400.139102':{'copyme_asg2.1 Points Grade <Numeric MaxPoints:10 Weight:1.08 Category:Assignments CategoryWeight:30>':8, ...}}
-		with open(f, 'r', newline='') as csvfile:
+		with open(f, 'r', newline='', encoding='utf-8-sig') as csvfile:
 			dr = csv.DictReader(csvfile)
 			for row in dr:
 				sid = '%s-%s_%s' % (row['OrgDefinedId'], row['First Name'], row['Last Name'])			

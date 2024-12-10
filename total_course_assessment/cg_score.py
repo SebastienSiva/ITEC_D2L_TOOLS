@@ -5,6 +5,7 @@ import os, csv, re
 
 GRADE_BOOK_SEARCH_TAG = "Points Grade <Numeric MaxPoints"
 QUIZ_GRADE_SEARCH_TAG = "Q Title"
+QUIZ_QUESTION_COURSE_GOAL_ANNOTATION = r"\[GOAL (\d+)\]"
 
 DOCUMENTATION = "https://github.com/SebastienSiva/ITEC_D2L_TOOLS/blob/main/total_course_assessment/README.md"
 
@@ -60,7 +61,7 @@ class CG_Score:
 				qid = row['Q Title'] + ': ' + row['Q Text']
 				if qid in student_questions: continue # question already done
 				student_questions.add(qid)
-				for cg in re.findall(r"\[GOAL (\d+)\]", qid.upper()): # + re.findall(r"GOAL \d", row['Q Title'].upper()):
+				for cg in re.findall(QUIZ_QUESTION_COURSE_GOAL_ANNOTATION, qid.upper()): # + re.findall(r"GOAL \d", row['Q Title'].upper()):
 					cg_lbl = 'CG' + cg
 					self.cg_map[cg_lbl].add(base_file_name + ': ' + qid)			
 					cgp = cg_lbl + '_points'

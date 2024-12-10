@@ -17,9 +17,9 @@ The app uses 3 types of files to calculate course goal scores for a D2L section.
 
 * **File_Type3** (1 file only if File_Type2 present): CSV file mapping grades to course goals according to the following format:
 
-GRADE_NAME,CG,CG,CG,CG,CG  
-Final Exam,5,6,1  
-Asg 7,5,6
+    GRADE_NAME,CG,CG,CG,CG,CG  
+    Final Exam,5,6,1  
+    Asg 7,3,4
 
 ## Command Line Options
 

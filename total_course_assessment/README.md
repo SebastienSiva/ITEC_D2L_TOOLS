@@ -23,7 +23,7 @@ The app uses 3 types of files to calculate course goal scores for a D2L section.
     
     Note: The first row must be the header and will be skipped for processing.
     
-Note: We recommend short file names.
+Note: We recommend you rename long file names to short file names.
 
 ## Command Line Options
 

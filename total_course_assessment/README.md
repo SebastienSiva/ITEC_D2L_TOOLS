@@ -40,7 +40,7 @@ Ex: python3 cg_score.py 2140_grade_cg.csv GB_Points.csv FinalExamMC.csv
 
 
 ## Run gui from the command line
-`pip install FreeSimpleGUI`
+`python -m pip install FreeSimpleGUI`
 
 `python cg_score_gui.py`
 

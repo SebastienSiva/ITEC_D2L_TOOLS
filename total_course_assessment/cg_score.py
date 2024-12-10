@@ -150,7 +150,7 @@ class CG_Score:
 			reader = csv.reader(csvfile); next(reader)
 			for row in reader:
 				asg_name = row[0]
-				cg_list = ['CG' + x for x in row[1:] if len(x.strip()) > 0]
+				cg_list = [x for x in row[1:] if len(x.strip()) > 0]
 				gradebook_cgs[asg_name] = cg_list
 				for cg in cg_list: self.cg_map[cg].add(base_file_name + ': ' + asg_name)
 

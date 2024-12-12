@@ -8,7 +8,7 @@ Note: There may be several steps to overcome Windows/AntiVirus security. You may
 
 Mac OS Notes: After trying to run the app and getting blocked, try going into Settings->Privacy and Security. There, under security, you will see the 'Run the App Anyways' option.
 
-## Files Supported (Note do not use Excel on CSV files as it can remove leading and trailing zeroes from IDs)
+## Files Supported
 The app uses 3 types of files to calculate course goal scores for a D2L section. Course goal scores are the percentage of students getting a 70% or better on course goal related assessment.
 
 * **File_Type1** (>= 0 files): Quiz grade export CSV files with the *Question Title (a.k.a. Short Description)* or *Question Text* containing one or more course goal identifiers with exact format [GOAL X] where X is a number. Examples: [GOAL 3], [GOAL 4]
@@ -23,7 +23,7 @@ The app uses 3 types of files to calculate course goal scores for a D2L section.
     
     Note: The first row must be the header and will be skipped for processing.
     
-Note: I recommend you rename long file names to short file names.
+Note: I recommend you avoid using Excel (as it removes zeroes from IDs recognized as numbers) and rename long file names to short file names.
 
 ## Command Line Options
 

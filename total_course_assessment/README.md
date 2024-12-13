@@ -13,7 +13,7 @@ The app uses 3 types of .CSV files to calculate course goal scores for a D2L sec
 
 * **File_Type1** (>= 0 files): Quiz grade export CSV files with the *Question Title (a.k.a. Short Description)* or *Question Text* containing one or more course goal identifiers with exact format [GOAL X] where X is a number. Examples: [GOAL 3], [GOAL 4]
 
-* **File_Type2** (0 or 1 file): The D2L gradebook exported as Points CSV with OrgId, FirstName, LastName.
+* **File_Type2** (0 or 1 file): The D2L gradebook exported as Points CSV with OrgId, FirstName, LastName. Make sure no grades are blank.
 
 * **File_Type3** (1 file only if File_Type2 present): CSV file mapping grades to course goals according to the following format:
 

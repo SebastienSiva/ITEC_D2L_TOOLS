@@ -24,7 +24,7 @@ class CG_Score:
 		self.ignored_students = defaultdict(list) # {'#400.139102':['Zero for Asg1', 'Zero for Asg2'], ...}
 		self.num_students_pass = defaultdict(int) # {CG1:13, CG2:14, ...}
 		self.cg_map = defaultdict(set) # only used for display {'CG1':{'IJ_class_asg5', 'CG5.1-Logical OR operator'}, 'CG2':...}
-
+		self.grades_not_used = set()
 	
 	def hasNoFiles(self):
 		return (self.grade_book == None and self.grade_book_cgs == None 
@@ -120,14 +120,18 @@ class CG_Score:
 					grade_name = header[0:header.find(GRADE_BOOK_SEARCH_TAG) - 1]
 					if grade_name in self.grade_book_cgs:
 						r = re.search(r"MaxPoints:(\d+)", header)
-						if not r: return ("ERROR: MaxPoints not found in", header)
+						if not r: return "ERROR: MaxPoints not found in %s" % (header)
 						grade_max = float(r.group(1))
+						if not self.grade_book[sid][header]:
+							return "ERROR: %s has no no grade for: %s" % (sid, grade_name)
 						grade_points = float(self.grade_book[sid][header])
 						if grade_points == 0:
 							self.ignored_students[sid].append(grade_name + ': 0 Points')
 						for cg in self.grade_book_cgs[grade_name]:
 							self.students[sid][cg+'_points'] += grade_points
 							self.students[sid][cg+'_max'] += grade_max
+					else:
+						self.grades_not_used.add(grade_name)
 
 		return ""		
 
@@ -214,7 +218,12 @@ class CG_Score:
 		for cg in sorted(self.cg_map.keys()): 
 			s += cg + "\n"
 			for label in sorted(self.cg_map[cg]):
-				s += ' - ' + label[0:80] + ('...' if len(label) >= 80 else '') + '\n'
+				s += ' - ' + label[0:80] + ('...' if len(label) > 80 else '') + '\n'
+
+		header = 'GRADES IN GRADEBOOK, BUT NOT USED IN MAP'
+		s += ("\n%s\n%s\n") % (header, '*' * 80)
+		for grade_name in sorted(self.grades_not_used): 
+			s += grade_name + "\n"
 		
 		header = 'ALL STUDENT COURSE GOAL SCORES'
 		s += ("\n%s\n%s\n") % (header, '*' * 80)

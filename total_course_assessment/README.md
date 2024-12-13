@@ -49,7 +49,7 @@ Build (on the corresponding OS) with:
 
 `pyinstaller --noconsole --onefile cg_score_gui.py`
 
-Note: On windows you may need to turn off Windows Defender to build.
+Note: On windows you may need to turn off realtime *Virus & Threat Protection* Settings / Windows Defender to build.
 
 
 

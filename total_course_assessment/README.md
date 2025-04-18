@@ -23,23 +23,14 @@ The app uses 3 types of .CSV files to calculate course goal scores for a D2L sec
     
     Note: The first row must be the header and will be skipped for processing.
     
-Note: I recommend you avoid using Excel (as it removes zeroes from IDs recognized as numbers) and rename long file names to short file names.
-
-## Command Line Options
-
-1.  Feed this script 0 command line arguments and it will automatically search the directory for the files described above.
-
-2.  Optionally include the files explicitly as command line arguments.
-
-Ex: python3 cg_score.py path_to_quz1_cg.csv path_to_quz2_cg.csv path_to_gradebook.csv path_to_grade_cg_map.csv
-
-Ex: python3 cg_score.py 2140_grade_cg.csv GB_Points.csv FinalExamMC.csv
-
-
-[Video Tutorial](https://ggcedu-my.sharepoint.com/:v:/g/personal/ssiva_ggc_edu/EVO5HIB7c0dNhDJctyECUpEBp-8Sq5dzMNLDvScqeoeuOw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=EXA3vG)
-
+Tips:
+* Avoid using Excel (as it removes zeroes from IDs recognized as numbers).
+* Rename long file names to short file names.
 
 ## Run gui from the command line
+
+Normally you should be able to double click the GUI app icon and it will run, but in case that fails, you can open a terminal/shell and use the following commands (assuming Python3 is correctly installed).
+
 `python -m pip install FreeSimpleGUI`
 
 `python cg_score_gui.py`

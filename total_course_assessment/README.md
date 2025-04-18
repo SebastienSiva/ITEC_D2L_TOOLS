@@ -1,5 +1,8 @@
 # Course Goal Assessment App
 
+[Video Tutorial](https://ggcedu-my.sharepoint.com/personal/ssiva_ggc_edu/_layouts/15/stream.aspx?id=%2Fpersonal%2Fssiva%5Fggc%5Fedu%2FDocuments%2FMS%5FStream%5FVideos%2FITEC%5FD2L%5FCourseGoalAssessment%2Emp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E06967dd4%2D3c86%2D47df%2D81df%2D53df17a0974e)
+
+
 ## Download The GUI
 * [Windows](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/Windows_CG_Score.zip)
 * [Mac OS](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/MacOS_CG_Score.zip)

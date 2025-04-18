@@ -6,4 +6,5 @@ The points are unweighted, so an 100 point assignment and a 10 point quiz questi
 
 ### Should I keep or remove students who were present for only some of the relevant assessments?
 
-To get consistant results across all sections, refer to your course coordinators guidance on this.
+To get consistant results across all sections, refer to your course coordinator's guidance on this.
+

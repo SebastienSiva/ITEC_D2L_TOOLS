@@ -4,6 +4,8 @@
 
 [Issue Tracker](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/issues)
 
+[FAQ](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/blob/main/total_course_assessment/FAQ.md)
+
 
 ## Download The GUI
 * [Windows](https://github.com/SebastienSiva/ITEC_D2L_TOOLS/raw/main/total_course_assessment/dist_zips/Windows_CG_Score.zip)

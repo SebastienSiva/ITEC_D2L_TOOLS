@@ -6,5 +6,5 @@ The points are unweighted, so an 100 point assignment and a 10 point quiz questi
 
 ### Should I keep or remove students who were present for only some of the relevant assessments?
 
-To get consistant results across all sections, refer to your course coordinator's guidance on this.
+We do not include students who are receiving a _W_ or _NF_ (No show Fail) in this assessment. If there is a more nuanced situation, refer to your course coordinator's guidance on this.
 

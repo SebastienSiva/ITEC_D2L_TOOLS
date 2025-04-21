@@ -2,7 +2,7 @@
 
 ### If you combine gradebook entries and specific quiz questions into an assessment score, how do the points combine?
 
-The points are unweighted, so an 100 point assignment and a 10 point quiz question will give a maximum of 110 point total. The current solution for this is to modify the gradebook .csv file in Excel with some formulas to adjust the weight of the assignment.
+The points are unweighted, so a 100 point assignment and a 10 point quiz question will give a maximum of 110 points total giving the assignment 10x the weight. The current solution for this is to modify the gradebook .csv file in Excel with some formulas to adjust the weight of the assignment prior to upload.
 
 ### Should I keep or remove students who were present for only some of the relevant assessments?
 

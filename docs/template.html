@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ITEC Course Goal Assessment</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect x='.5' y='.5' width='17' height='17' fill='%2300704a' stroke='%23fff'/%3E%3Cg font-family='Verdana,sans-serif' font-size='7.5' font-weight='bold' fill='%23fff' text-anchor='middle'%3E%3Ctext x='9' y='8'%3EIT%3C/text%3E%3Ctext x='9' y='15.5'%3EEC%3C/text%3E%3C/g%3E%3C/svg%3E">
+<style>
+	/* Hacker News-style layout in GGC colours (green #00704A, gray #A5ACB0).
+	   Always light (no dark mode): dark text on a light page is the most readable for most people.
+	   All text colours meet WCAG AAA contrast (7:1) on the page background. */
+	:root {
+		color-scheme: light;
+		--page: #ffffff; --bg: #f6f6ef; --text: #111111; --muted: #44494c;
+		--rule: #a5acb0; --green: #00704a; --bar-text: #ffffff; --link: #005538;
+		--error: #8a1c13; --field: #ffffff;
+	}
+	/* Sized for comfortable reading: 18px body text, nothing smaller than 15px. */
+	body { margin: 0; background: var(--page); color: var(--text);
+		font: 18px/1.55 Verdana, Geneva, sans-serif; }
+	.wrap { width: 85%; max-width: 1100px; margin: 10px auto; background: var(--bg); }
+	#drop { border: 2px dashed var(--rule); padding: 28px; text-align: center; color: var(--muted);
+		background: var(--field); cursor: pointer; margin-top: 8px; }
+	#drop:hover, .over #drop { border-color: var(--link); color: var(--link); }
+	.bar { background: var(--green); color: var(--bar-text); padding: 6px 10px; font-size: 19px;
+		display: flex; align-items: center; gap: 8px; }
+	.logo { display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 0 4px;
+		box-sizing: border-box; border: 1px solid #fff; font: bold 12px/1 Verdana, Geneva, sans-serif; flex: none; }
+	.bar b { margin-right: 6px; }
+	.bar a { color: var(--bar-text); text-decoration: none; font-weight: bold; margin-left: auto; white-space: nowrap; }
+	.bar a:hover { text-decoration: underline; }
+	.content { padding: 16px 14px 6px; }
+	a, button.link { color: var(--link); }
+	.sub, .note { color: var(--muted); font-size: 15px; }
+	h2 { font-size: 19px; font-weight: normal; margin: 0; }
+	section, .help { margin: 0 0 26px; }
+	section > .sub { margin: 2px 0 10px; }
+	ul.files { list-style: none; padding: 0; margin: 10px 0; }
+	ul.files li { padding: 4px 0; }
+	.tag { font-size: 15px; color: var(--muted); }
+	.tag.ok { color: var(--link); }
+	.tag.err { color: var(--error); }
+	button { font: 17px Verdana, Geneva, sans-serif; color: var(--text); background: var(--field);
+		border: 1px solid var(--rule); border-radius: 3px; padding: 7px 16px; cursor: pointer; }
+	button:disabled { color: var(--muted); cursor: default; opacity: .6; }
+	button.link { border: 0; background: none; padding: 0; font-size: 15px; text-decoration: underline; }
+	ul.files button.link { color: var(--muted); margin-left: 10px; }
+	:focus-visible { outline: 3px solid #ffc600; outline-offset: 2px; }
+	input[type=checkbox] { accent-color: var(--link); width: 20px; height: 20px; margin: 0 8px 0 0; vertical-align: -3px; }
+	.row { margin-top: 12px; }
+	.row button + button { margin-left: 10px; }
+	.error { color: var(--error); margin-top: 12px; white-space: pre-wrap; }
+	.student { margin: 10px 0; }
+	.student label { cursor: pointer; }
+	.student ul { margin: 2px 0 0 30px; padding: 0; list-style: none; color: var(--muted); font-size: 15px; }
+	pre { overflow-x: auto; font: 15px/1.5 Menlo, Consolas, monospace; margin: 8px 0 0;
+		padding: 12px; background: var(--field); border: 1px solid var(--rule); }
+	.help summary { cursor: pointer; color: var(--link); font-size: 17px; }
+	.help p, .help li { font-size: 16px; }
+	.help ul { padding-left: 24px; }
+	.help code { font-size: 15px; }
+	/* Status line: coloured stripe + light tint per state; text stays dark for contrast. */
+	#status { margin: 0 0 18px; padding: 8px 12px; border-left: 5px solid; font-size: 15px; color: var(--text); }
+	#status.loading { border-color: #ffc600; background: #fff6d6; }
+	#status.ready { border-color: var(--green); background: #e4f1ea; }
+	#status.failed { border-color: var(--error); background: #f8e3e1; color: var(--error); }
+	footer { border-top: 2px solid var(--green); margin: 12px 0 0; padding: 14px; text-align: center; }
+	table.summary { border-collapse: collapse; margin: 8px 0 4px; font-size: 19px; }
+	table.summary th, table.summary td { text-align: left; padding: 5px 18px 5px 0; border-bottom: 1px solid var(--rule); }
+	table.summary th { font-size: 15px; font-weight: normal; color: var(--muted); }
+	table.summary td.pct { font-weight: bold; text-align: right; }
+	table.summary td.src { font-size: 15px; color: var(--muted); padding-left: 10px; }
+	.warn { margin-top: 12px; padding: 8px 12px; border-left: 5px solid #ffc600; background: #fff6d6; font-size: 16px; }
+	.warn ul { margin: 6px 0 0; padding-left: 20px; }
+	.warn li { margin: 3px 0; }
+	details.full { margin-top: 10px; }
+	details.full summary { cursor: pointer; color: var(--link); font-size: 16px; }
+	.guide h2 { font-size: 21px; margin: 0 0 4px; }
+	.guide h3 { font-size: 18px; font-weight: bold; margin: 26px 0 6px; }
+	.guide p, .guide li { font-size: 17px; }
+	.guide ol { padding-left: 26px; }
+	.guide li { margin-bottom: 10px; }
+	.guide figure { margin: 8px 0 14px; }
+	.guide img { display: block; max-width: 100%; height: auto; border: 1px solid var(--rule); }
+	.guide figcaption { font-size: 14px; color: var(--muted); margin-top: 3px; }
+	.guide code { font-size: 15px; }
+	.hidden { display: none; }
+	@media (max-width: 600px) { .wrap { width: auto; margin: 0; } body { font-size: 17px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+	<div class="bar"><span class="logo" aria-hidden="true">ITEC</span><b>Course Goal Assessment</b> <a href="#how-to" id="help-link">how to use</a></div>
+	<div class="content">
+	<div id="tool">
+	<p id="status" class="loading" role="status">Starting Python in this browser tab: downloading the Pyodide runtime (CPython compiled to
+		WebAssembly, ~10&nbsp;MB, cached after the first visit)&hellip; This can take up to a minute.</p>
+
+	<section id="step-files">
+		<h2>1. Add CSV files</h2>
+		<div class="sub">D2L quiz exports, plus optionally one gradebook Points export and one goal map.</div>
+		<input type="file" id="picker" accept=".csv,text/csv" multiple hidden>
+		<div id="drop" role="button" tabindex="0">drop CSV files here, or click to choose</div>
+		<ul class="files" id="file-list"></ul>
+		<div class="row">
+			<button id="btn-check" disabled>Check files</button>
+			<button id="btn-reset">Start over</button>
+		</div>
+		<div id="file-warn" class="warn hidden"></div>
+		<div id="file-error" class="error hidden"></div>
+	</section>
+
+	<section class="hidden" id="step-students">
+		<h2>2. Review flagged students</h2>
+		<div class="sub">These students had a zero on a mapped grade or are missing from some files.
+			<b>Remove</b> (checked) leaves them out, e.g. W / NF students who withdrew.
+			<b>Keep</b> (unchecked) includes them, with zeros for anything they are missing.</div>
+		<div id="student-list"></div>
+		<div class="row"><button id="btn-process">Calculate scores</button></div>
+	</section>
+
+	<section class="hidden" id="step-report">
+		<h2>3. Report</h2>
+		<div class="sub">These are the numbers to report: the percent of students scoring 70% or better on each course goal.</div>
+		<table class="summary" id="summary"></table>
+		<div class="sub" id="summary-total"></div>
+		<details class="full">
+			<summary>Full details: which questions/grades map to each goal, and every student&rsquo;s scores</summary>
+			<pre id="report"></pre>
+		</details>
+		<div class="row"><button id="btn-download">Download full report (.txt)</button></div>
+	</section>
+	</div>
+
+	<section id="guide" class="guide hidden">
+		<p><a href="#">&larr; back to the tool</a></p>
+		<h2>How to use Course Goal Assessment</h2>
+		<p class="sub">Every other semester, each section reports the percent of students scoring 70% or better on each course goal.
+			This tool computes those numbers from D2L exports in a few seconds, replacing the old spreadsheet work.
+			Adapted from Dr. Sebastien Siva&rsquo;s video walkthrough of the desktop version.</p>
+
+		<p>There are two ways to tell the tool which work belongs to which course goal. Use either one, or both together.</p>
+
+		<h3>Approach A: tag quiz questions (most common, e.g. your final exam)</h3>
+		<ol>
+			<li><b>Before giving the quiz</b>, put a tag such as <code>[GOAL 5]</code> in each question&rsquo;s
+				<b>Title</b> or its <b>Question Text</b>. Either place works. A question that covers several goals
+				can carry several tags, e.g. <code>[GOAL 3][GOAL 4]</code>.
+				<br>Capitalisation doesn&rsquo;t matter (<code>[Goal 3]</code> works), but the format does: square brackets,
+				the word GOAL, <b>one</b> space, the number. <code>GOAL 3</code>, <code>(GOAL 3)</code>, <code>[GOAL3]</code> and
+				<code>[ GOAL 3]</code> are not recognised; the tool warns you when it sees one.
+				<figure><img src="guide_images/d2l_1_goal_title.jpg" alt="D2L Edit Question dialog with [GOAL 5] typed at the start of the Title field">
+					<figcaption>The tag at the start of the question title.</figcaption></figure>
+				<figure><img src="guide_images/d2l_2_question_list.jpg" alt="D2L quiz question list where each question title starts with [GOAL 5]">
+					<figcaption>Tagged questions in the quiz&rsquo;s question list.</figcaption></figure></li>
+			<li>After students have taken it, go to <b>Quizzes</b>, open the quiz&rsquo;s menu, choose <b>Grade</b>,
+				then click <b>Export to CSV</b>.
+				<figure><img src="guide_images/d2l_3_export_quiz.jpg" alt="D2L Grade Quiz page with the Export to CSV button">
+					<figcaption>Grade Quiz page: Export to CSV.</figcaption></figure></li>
+			<li>Have a midterm <i>and</i> a final (or several quizzes)? Export each one and add them all; the points are combined.</li>
+		</ol>
+
+		<h3>Approach B: map whole gradebook items to goals</h3>
+		<ol>
+			<li>In <b>Grades</b>, choose <b>Export</b>. Set <b>Key Field</b> to <i>Org Defined ID</i>, tick
+				<b>Points grade</b>, and tick <b>Last Name</b>, <b>First Name</b> and <b>Email</b>. Then click
+				<b>Export to CSV</b> and <b>Download</b> (D2L can take a minute to prepare the file).
+				<figure><img src="guide_images/d2l_4_export_options.jpg" alt="D2L Export Grades options: Org Defined ID, Points grade, Last Name, First Name, Email selected" style="width:450px">
+					<figcaption>Export Grades options.</figcaption></figure></li>
+			<li>Make sure <b>no grades are blank</b>. Enter zeros for missing grades in D2L, or delete those students&rsquo;
+				rows from the CSV.</li>
+			<li>Create a <b>goal map</b> CSV in a text editor (Notepad, TextEdit, BBEdit, etc.).
+				The first row is the header <code>GRADE_NAME,CG,CG,...</code>. Each following row is a gradebook item&rsquo;s
+				name, spelled exactly as in D2L (capitalisation included), followed by the goals it counts toward, written as
+				<code>CG1</code>, <code>CG2</code>&hellip; in capitals with no spaces after the commas.
+				(<button class="link" id="btn-template">download a blank goal map</button>)
+				<figure><img src="guide_images/d2l_5_goal_map.jpg" alt="Goal map CSV in a text editor: GRADE_NAME,CG,CG,CG,CG,CG then two assignment rows" style="width:560px">
+					<figcaption>Example goal map: <i>PythonTutor Assignment 2.2</i> counts toward goals 5 and 1.</figcaption></figure></li>
+			<li>Add the gradebook export and the goal map <b>together</b>. Either one alone is rejected.</li>
+		</ol>
+
+		<h3>Both approaches together</h3>
+		<p>Add the quiz exports, the gradebook export and the goal map at the same time. They must be from the same section,
+			or every student will be flagged as missing from some file. <b>Points are points</b>: they are added up
+			unweighted, so a 20-point quiz question and a 20-point assignment count equally toward a goal.</p>
+
+		<h3>Running the tool</h3>
+		<ol>
+			<li><b>Add your CSV files</b>: drop them on the box or click it to choose them.
+				<figure><img src="guide_images/app_1_files.png" alt="Step 1 of the tool with four CSV files added">
+					<figcaption>Four files added (fake sample data).</figcaption></figure></li>
+			<li><b>Check files.</b> Each file is labelled with what it was recognised as. Anything in red is skipped and says why.
+				A gold box lists anything that would make a goal quietly wrong: mistyped tags, a quiz with no tags,
+				goal-map goals like <code>cg1</code>, or goal-map items that aren&rsquo;t in the gradebook.
+				<figure><img src="guide_images/app_2_checked.png" alt="Files labelled quiz file, grade book, and grade book course goal map">
+					<figcaption>Every file recognised.</figcaption></figure></li>
+			<li><b>Review flagged students</b>: students missing from a file or with a zero on a mapped grade.
+				<b>Remove</b> anyone who withdrew (W / NF). <b>Keep</b> a student to include them with zeros for whatever
+				they are missing. The decision is yours, or your course coordinator&rsquo;s.
+				<figure><img src="guide_images/app_3_flagged.png" alt="Three flagged students with Remove checkboxes and the reasons listed">
+					<figcaption>Flagged students and the reason for each.</figcaption></figure></li>
+			<li><b>Calculate scores.</b> The table at the top holds the numbers you report. The <i>Counted from</i> column
+				shows how many quiz questions and gradebook items fed each goal, a quick check that every goal got the work you expected. The full details
+				(which questions and grades fed each goal, and every student&rsquo;s per-goal score) are below it and in the
+				downloadable report.
+				<figure><img src="guide_images/app_4_report.png" alt="Report showing total students and percent per course goal">
+					<figcaption>The report.</figcaption></figure></li>
+		</ol>
+
+		<h3>Tips</h3>
+		<ul>
+			<li>If you need to look at or edit an export, use a text editor rather than Excel: Excel can change IDs it mistakes for numbers.</li>
+			<li>Long file names are fine, but short ones are easier to read in the file list.</li>
+		</ul>
+
+		<h3>How it works</h3>
+		<p>This page runs the same <code>cg_score.py</code> as the desktop app, using
+			<a href="https://pyodide.org" target="_blank" rel="noopener">Pyodide</a> (the CPython interpreter compiled to
+			WebAssembly). Added CSVs are copied into an in-memory file system inside the browser tab, read with Python&rsquo;s
+			<code>csv</code> module, then deleted. Only the Pyodide runtime is downloaded (from the jsDelivr CDN); no grade data
+			is sent anywhere, and closing the tab clears everything.</p>
+		<p class="sub">D2L screenshots are taken from Dr. Siva&rsquo;s tutorial video; tool screenshots use made-up sample data.</p>
+		<p><a href="#">&larr; back to the tool</a></p>
+	</section>
+	</div>
+	<footer class="note">
+		Scoring by Sebastien Siva&rsquo;s <a href="https://github.com/SebastienSiva/ITEC_D2L_TOOLS" target="_blank" rel="noopener">ITEC D2L Tools</a>
+		&nbsp;|&nbsp; needs internet to start; your files never leave this computer
+	</footer>
+</div>
+
+<script>const CG_SCORE_PY = __CG_SCORE_PY__;</script>
+
+<script type="text/plain" id="glue-py">
+import csv, json, os, re, shutil
+import cg_score
+
+RUN_DIR = '/tmp/cg_run'
+cgs = None
+quiz_files = set()       # names of files recognised as quiz exports
+gradebook_items = set()  # grade item names found in the gradebook export
+
+# cg_score.py only recognises tags written exactly like [GOAL 3] (any capitalisation).
+TAG_OK = re.compile(r'\[GOAL \d+\]')
+# Things that look like a goal tag but aren't recognised: missing brackets, extra spaces, a colon, etc.
+TAG_NEAR = re.compile(r'[\[({]?[ \t]*GOAL[ \t]*[:#-]?[ \t]*\d+[ \t]*[\])}]?', re.IGNORECASE)
+MAX_PER_FILE = 8
+
+def is_gradebook_part(path):
+	try:
+		return cgs.isGradeBookFile(path) or cgs.isGradeBookCGMapFile(path)
+	except Exception:
+		return False
+
+def quiz_warnings(path, name):
+	"""Near-miss goal tags in a quiz export, and quizzes with no tags at all."""
+	warnings, seen, tagged = [], set(), 0
+	with open(path, newline='', encoding='utf-8-sig') as f:
+		for row in csv.DictReader(f):
+			title, text = row.get('Q Title', ''), row.get('Q Text', '')
+			qid = title + ': ' + text  # same key cg_score.py uses
+			if qid in seen: continue
+			seen.add(qid)
+			if TAG_OK.search(qid.upper()): tagged += 1
+			for m in TAG_NEAR.finditer(qid):
+				near = m.group(0).strip()
+				if not TAG_OK.fullmatch(near.upper()):
+					digits = re.search(r'\d+', near).group(0)
+					warnings.append('%s: "%s" in question "%s" is not recognised; write it as [GOAL %s].'
+						% (name, near, (title or text)[:60], digits))
+	if len(warnings) > MAX_PER_FILE:
+		warnings = warnings[:MAX_PER_FILE] + ['%s: ...and %d more like these.' % (name, len(warnings) - MAX_PER_FILE)]
+	if tagged == 0:
+		warnings.append('%s: no [GOAL X] tags found, so this file adds nothing to any goal.' % name)
+	return warnings
+
+def map_warnings(name):
+	"""Goal map entries that would be silently split off or ignored."""
+	warnings = []
+	for item, goals in cgs.grade_book_cgs.items():
+		for g in goals:
+			if not re.fullmatch(r'CG\d+', g):
+				fix = re.search(r'\d+', g)
+				warnings.append('%s: goal "%s" for "%s" will be counted as a separate goal; write it as %s '
+					'(capital CG, no spaces).' % (name, g, item, 'CG' + fix.group(0) if fix else 'CG<number>'))
+		if gradebook_items and item not in gradebook_items:
+			close = [i for i in gradebook_items if i.strip().lower() == item.strip().lower()]
+			warnings.append('%s: "%s" is not a gradebook item, so it is ignored%s.'
+				% (name, item, ' (did you mean "%s"?)' % close[0] if close else '; check the spelling'))
+	return warnings
+
+def check_files(names):
+	"""Classify the files written to RUN_DIR; return per-file results, warnings and flagged students."""
+	global cgs, gradebook_items
+	cgs = cg_score.CG_Score()
+	quiz_files.clear()
+	warnings = []
+	results = {}
+	gb_error = ''
+	# Gradebook + goal map first, then quizzes: CG_Score only checks for students missing from a file against
+	# students it already holds, and gradebook students are only added once processGradeBook() runs.
+	# This makes the flagged-student list independent of the order files were added.
+	for name in sorted(names, key=lambda n: not is_gradebook_part(os.path.join(RUN_DIR, n))):
+		try:
+			r = cgs.process_file(os.path.join(RUN_DIR, name))
+		except Exception as e:
+			r = 'ERROR: Could not read file (%s: %s)' % (type(e).__name__, e)
+		results[name] = r
+		if r == 'QUIZ FILE':
+			quiz_files.add(name)
+			warnings += quiz_warnings(os.path.join(RUN_DIR, name), name)
+		# Like the desktop GUI: process the gradebook as soon as both of its files are in.
+		e = cgs.processGradeBook()
+		if e and not gb_error and 'Requires both' not in e:
+			gb_error = e
+	shutil.rmtree(RUN_DIR, ignore_errors=True)  # don't keep student data around
+	tag = cg_score.GRADE_BOOK_SEARCH_TAG
+	headers = next(iter(cgs.grade_book.values()), {}) if cgs.grade_book else {}
+	gradebook_items = {h[:h.find(tag) - 1] for h in headers if tag in h}
+	if cgs.grade_book_cgs:
+		map_name = next(n for n, r in results.items() if r == 'GRADE BOOK COURSE GOAL MAP')
+		warnings += map_warnings(map_name)
+	if cgs.hasNoFiles():
+		error = 'ERROR: No usable files.'
+	else:
+		error = gb_error or cgs.processGradeBook()
+	results = [[n, results[n]] for n in names]
+	return json.dumps({'files': results, 'error': error, 'warnings': warnings,
+		'flagged': {sid: reasons for sid, reasons in cgs.ignored_students.items()}})
+
+def calculate(keep):
+	for sid in json.loads(keep):
+		cgs.ignored_students.pop(sid, None)
+	cgs.filter_students()
+	cgs.calc_num_students_pass()
+	total = len(cgs.students)
+	# Every goal that appears in the files, including any where nobody passed (0%).
+	goals = sorted(cgs.cg_map, key=lambda g: (len(g), g))
+	summary = []
+	for g in goals:
+		# cg_map labels are "<file name>: <question or grade item>"
+		sources = [label.split(': ', 1) for label in cgs.cg_map[g]]
+		questions = sum(1 for f, _ in sources if f in quiz_files)
+		items = sum(1 for f, item in sources if f not in quiz_files and item in gradebook_items)
+		pct = round(100 * cgs.num_students_pass.get(g, 0) / total) if total else 0
+		summary.append([g, pct, questions, items])
+	return json.dumps({'total': total, 'summary': summary, 'text': cgs.get_stats_str()})
+</script>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+let py = null, files = [], reportText = '';
+
+function show(id, on) { $(id).classList.toggle('hidden', !on); }
+
+// Plain-language explanations for cg_score.py's error messages.
+const HINTS = [
+	['UNRECOGNISED FILE', 'Not a D2L quiz export, gradebook Points export, or goal map. Remove it or check the export.'],
+	['2 Grade Book Files', 'Only one gradebook export can be used. Remove the extra one.'],
+	['2 Grade Book Course Goal', 'Only one goal map can be used. Remove the extra one.'],
+	['Requires both gradebook', 'A gradebook export and a goal map must be added together (or neither).'],
+	['has no no grade for', 'This student has a blank grade in the gradebook. Enter a grade (e.g. 0) in D2L and export again.'],
+	['MaxPoints not found', 'The gradebook must be exported as Points.'],
+	['Could not read file', 'The file is missing expected D2L columns. Export it again from D2L without editing it.'],
+	['No usable files', 'Add at least one quiz export, or a gradebook export with a goal map.'],
+];
+function friendly(msg) {
+	const hint = HINTS.find(([key]) => msg.includes(key));
+	return hint ? hint[1] : msg.replace(/^ERROR: /, '');
+}
+
+function renderFiles(results) {
+	const tags = Object.fromEntries(results || []);
+	const list = $('file-list');
+	list.replaceChildren();
+	files.forEach((f, i) => {
+		const li = document.createElement('li');
+		const name = document.createElement('span');
+		name.textContent = f.name + ' ';
+		const tag = document.createElement('span');
+		const r = tags[f.name];
+		if (r) {
+			const bad = r.startsWith('ERROR');
+			tag.className = 'tag ' + (bad ? 'err' : 'ok');
+			tag.textContent = bad ? friendly(r) : r.toLowerCase();
+		}
+		name.append(tag);
+		const rm = document.createElement('button');
+		rm.className = 'link';
+		rm.textContent = 'remove';
+		rm.onclick = () => { files.splice(i, 1); resetResults(); renderFiles(); };
+		li.append(name, rm);
+		list.append(li);
+	});
+	$('btn-check').disabled = !py || files.length === 0;
+}
+
+function renderWarnings(warnings) {
+	const box = $('file-warn');
+	box.replaceChildren();
+	if (!warnings.length) return;
+	const p = document.createElement('div');
+	p.textContent = 'Check these. They aren’t errors, but they would make a goal’s numbers quietly wrong:';
+	const ul = document.createElement('ul');
+	for (const w of warnings) { const li = document.createElement('li'); li.textContent = w; ul.append(li); }
+	box.append(p, ul);
+	show('file-warn', true);
+}
+
+function plural(n, word) { return n + ' ' + word + (n === 1 ? '' : 's'); }
+
+function resetResults() {
+	show('file-error', false); show('file-warn', false); show('step-students', false); show('step-report', false);
+}
+
+function addFiles(fileList) {
+	for (const f of fileList) {
+		if (!f.name.toLowerCase().endsWith('.csv')) continue;
+		const i = files.findIndex(x => x.name === f.name);
+		if (i >= 0) files[i] = f; else files.push(f);
+	}
+	resetResults();
+	renderFiles();
+}
+
+async function checkFiles() {
+	resetResults();
+	py.FS.mkdirTree('/tmp/cg_run');
+	for (const f of files) {
+		py.FS.writeFile('/tmp/cg_run/' + f.name, new Uint8Array(await f.arrayBuffer()));
+	}
+	const res = JSON.parse(py.globals.get('check_files')(py.toPy(files.map(f => f.name))));
+	renderFiles(res.files);
+	renderWarnings(res.warnings);
+	if (res.error) {
+		// Keep the original message too: it names the student / grade involved.
+		$('file-error').textContent = friendly(res.error) + '\n\nDetails: ' + res.error.replace(/^ERROR: /, '');
+		show('file-error', true);
+		return;
+	}
+	if (res.files.some(([, r]) => r.startsWith('ERROR'))) {
+		$('file-error').textContent = 'Files marked in red were skipped. Remove them, or fix them and add them again.';
+		show('file-error', true);
+	}
+	const list = $('student-list');
+	list.replaceChildren();
+	const flagged = Object.entries(res.flagged);
+	if (flagged.length === 0) {
+		list.textContent = 'No students flagged.';
+	}
+	for (const [sid, reasons] of flagged) {
+		const div = document.createElement('div');
+		div.className = 'student';
+		const label = document.createElement('label');
+		const cb = document.createElement('input');
+		cb.type = 'checkbox'; cb.checked = true; cb.dataset.sid = sid;
+		label.append(cb, document.createTextNode('Remove ' + sid));
+		const ul = document.createElement('ul');
+		for (const r of reasons) {
+			const li = document.createElement('li');
+			li.textContent = r;
+			ul.append(li);
+		}
+		div.append(label, ul);
+		list.append(div);
+	}
+	$('btn-process').disabled = false;
+	show('step-students', true);
+}
+
+function calculate() {
+	const keep = [...document.querySelectorAll('#student-list input:not(:checked)')].map(cb => cb.dataset.sid);
+	const res = JSON.parse(py.globals.get('calculate')(JSON.stringify(keep)));
+	reportText = res.text;
+	$('report').textContent = reportText;
+	const table = $('summary');
+	table.replaceChildren();
+	const head = table.insertRow();
+	for (const h of ['Course goal', 'Students ≥ 70%', 'Counted from']) { const th = document.createElement('th'); th.textContent = h; head.append(th); }
+	for (const [goal, pct, questions, items] of res.summary) {
+		const tr = table.insertRow();
+		// Only well-formed CG<n> become "Goal n"; anything else (e.g. "cg1") is shown as typed so it stands out.
+		tr.insertCell().textContent = /^CG\d+$/.test(goal) ? goal.replace(/^CG/, 'Goal ') : `"${goal}"`;
+		const td = tr.insertCell(); td.className = 'pct'; td.textContent = pct + '%';
+		const parts = [];
+		if (questions) parts.push(plural(questions, 'quiz question'));
+		if (items) parts.push(plural(items, 'gradebook item'));
+		const src = tr.insertCell(); src.className = 'src'; src.textContent = parts.join(', ') || 'nothing';
+	}
+	$('summary-total').textContent = `Based on ${res.total} students.`;
+	$('btn-process').disabled = true; // CG_Score accumulates; re-check files to rerun
+	show('step-report', true);
+	$('step-report').scrollIntoView({ behavior: 'smooth' });
+}
+
+function saveText(text, name, type) {
+	const a = document.createElement('a');
+	a.href = URL.createObjectURL(new Blob([text], { type }));
+	a.download = name;
+	a.click();
+	setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+function download() { saveText(reportText, 'course_goal_report.txt', 'text/plain'); }
+
+$('drop').onclick = () => $('picker').click();
+$('drop').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('picker').click(); } };
+// "how to use" shows the guide in place of the tool (#how-to); the back button returns.
+function route() {
+	const guide = location.hash === '#how-to';
+	show('guide', guide); show('tool', !guide);
+	if (guide) scrollTo(0, 0);
+}
+window.onhashchange = route;
+route();
+$('picker').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+// Dropping anywhere on the page works; the drop box highlights while dragging.
+document.ondragover = e => { e.preventDefault(); document.body.classList.add('over'); };
+document.ondragleave = e => { if (!e.relatedTarget) document.body.classList.remove('over'); };
+document.ondrop = e => { e.preventDefault(); document.body.classList.remove('over'); addFiles(e.dataTransfer.files); };
+$('btn-check').onclick = async () => {
+	const btn = $('btn-check');
+	btn.disabled = true; btn.textContent = 'Checking…';
+	try { await checkFiles(); }
+	catch (err) {
+		console.error(err);
+		$('file-error').textContent = 'Something went wrong reading the files. Check they are unedited D2L CSV exports.';
+		show('file-error', true);
+	}
+	btn.textContent = 'Check files'; btn.disabled = files.length === 0;
+};
+$('btn-template').onclick = () => saveText('GRADE_NAME,CG,CG,CG,CG,CG\n', 'goal_map.csv', 'text/csv');
+$('btn-process').onclick = calculate;
+$('btn-download').onclick = download;
+$('btn-reset').onclick = () => { files = []; resetResults(); renderFiles(); };
+
+(async () => {
+	try {
+		py = await loadPyodide();
+		py.FS.writeFile('/home/pyodide/cg_score.py', CG_SCORE_PY);
+		py.runPython('import sys; sys.path.insert(0, "/home/pyodide")');
+		py.runPython($('glue-py').textContent);
+		const pyVer = py.runPython('import sys; sys.version.split()[0]');
+		$('status').className = 'ready';
+		$('status').textContent = `Ready. Python ${pyVer} (Pyodide ${py.version}) is running locally in this browser tab `
+			+ 'with cg_score.py loaded. CSVs you add are read into the tab’s memory and processed here; nothing is uploaded.';
+		renderFiles();
+	} catch (err) {
+		console.error(err);
+		$('status').textContent = 'Couldn’t start. This page needs an internet connection to load. Check your connection and reload the page.';
+		$('status').className = 'failed';
+	}
+})();
+</script>
+</body>
+</html>

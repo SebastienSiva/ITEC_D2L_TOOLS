@@ -6,7 +6,9 @@ It runs the real `cg_score.py` in the browser using [Pyodide](https://pyodide.or
 **CSV files are read and processed on the user's computer and are never uploaded.**
 
 ## Use
-Open `ITEC_Course_Goal_Assessment.html` (double-click, or host it on any web space), add the CSV files, click **Check files**,
+Hosted at https://sebastiensiva.github.io/ITEC_D2L_TOOLS/ (GitHub Pages, served from this `docs/` folder on `main`).
+
+Open `index.html` (double-click, or host it on any web space), add the CSV files, click **Check files**,
 review flagged students, then **Calculate scores**. File formats are described in
 [the main README](../total_course_assessment/README.md).
 
@@ -17,10 +19,10 @@ Scoring logic lives only in `../total_course_assessment/cg_score.py`. After chan
 
 `python build.py`
 
-This embeds `cg_score.py` into `template.html` and writes the self-contained `ITEC_Course_Goal_Assessment.html`.
+This embeds `cg_score.py` into `template.html` and writes the self-contained `index.html`.
 
 ## Hosting
-`ITEC_Course_Goal_Assessment.html` is a single static file; any web server (e.g. GGC web space) works, with no PHP or database.
+`index.html` is a single static file; any web server (e.g. GGC web space) works, with no PHP or database.
 To avoid depending on jsDelivr, download the Pyodide release and change the `pyodide.js` URL in `template.html`.
 
 ## How-to guide and screenshots

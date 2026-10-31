@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Builds ITEC_Course_Goal_Assessment.html by embedding ../total_course_assessment/cg_score.py into template.html,
+# Builds index.html by embedding ../total_course_assessment/cg_score.py into template.html,
 # so the web app always runs the same scoring code as the CLI and desktop GUI.
 import os, json, re, base64
 
@@ -20,5 +20,5 @@ def inline_image(m):
 	return 'src="data:%s;base64,%s"' % (mime, data)
 page = re.sub(r'src="(guide_images/[^"]+)"', inline_image, page)
 
-with open(os.path.join(HERE, 'ITEC_Course_Goal_Assessment.html'), 'w', encoding='utf-8') as f: f.write(page)
-print('Wrote ITEC_Course_Goal_Assessment.html')
+with open(os.path.join(HERE, 'index.html'), 'w', encoding='utf-8') as f: f.write(page)
+print('Wrote index.html')
